@@ -1,0 +1,25 @@
+[CYBERNODES]
+;Name, Sensors, 			Actuators
+ PLC1, 	P_TANK,
+ PLC2, 	S_PUMP,	PUMP 
+[CYBERLINKS]
+;Source, 	Destination, 	Sensors
+ PLC1, 		PLC2, 			P_TANK
+ PLC1, 		SCADA, 			P_TANK
+[CYBERATTACKS]
+; Type,	Target,	Init_cond,	End_cond,	Arguments
+ Control,	CTRL2n,	TIME==10,	TIME==20,	1.5 
+ Control,	CTRL1n,	TIME==30,	TIME==45,	1
+ Communication,	PLC1-P_TANK-SCADA,	TIME==320,	TIME==-1, replay 50 0.05 5 0
+ Communication,	PLC1-P_TANK-PLC2, TIME==50, TIME==65, constant 0.5
+
+ Communication,	PLC1-P_TANK-SCADA, TIME==100, TIME==120, offset -0.5
+ Communication,	PLC1-P_TANK-PLC2, TIME==130, TIME==150, offset -1
+;Communication,	PLC2-P_TANK-SCADA, TIME==170, TIME==200, offset -2
+
+
+[CYBEROPTIONS]
+ verbosity, 1
+ what_to_store, TANK PUMP P10 P110, PRESSURE, FLOW STATUS
+ initial_conditions, 4
+ patterns_file, ./minitown_patterns.csv
